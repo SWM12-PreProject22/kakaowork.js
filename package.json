@@ -1,0 +1,20 @@
+{
+  "name": "kakaowork",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/kakaowork.js",
+  "types": "./dist/kakaowork.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "author": "Eunhak Lee",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@types/node": "^14.14.41",
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.4"
+  }
+}
