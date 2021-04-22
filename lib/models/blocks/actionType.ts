@@ -1,4 +1,3 @@
-
 export interface ButtonActionType {
     actionType(): "open_inapp_browser"
         | "open_system_browser"

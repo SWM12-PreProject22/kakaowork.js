@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { KakaoServerAbnormalStatus } from './errors/baseKakaoWorkError';
 import { Conversation } from './models/conversation';
 import { User } from './models/user';
 
@@ -31,6 +32,14 @@ export class KakaoWork {
         this.conversations.clear();
     }
 
+    static throwIfAbnormal(response: AxiosResponse) {
+        if (response.status < 200 || response.status > 300)
+            throw new KakaoServerAbnormalStatus(response);
+
+        if (!response.data.success)
+            throw new KakaoServerAbnormalStatus(response);
+    }
+
     get_user(id: Number): User | undefined {
         return this.users.get(id)
     }
@@ -41,20 +50,20 @@ export class KakaoWork {
         let empty = false;
 
         const response = await this.client.get('/users.list', { params: data });
-        if (response.status >= 200 && response.status < 300) {
-            for (const u of response.data.users) {
-                let user: User = new User(this, u)
-                this.users.set(user.id, user)
-                yield user;
-            }
+        KakaoWork.throwIfAbnormal(response);
 
-            if (response.data.cursor)
-                yield* this.fetch_user_list(limit, response.data.cursor);
+        for (const u of response.data.users) {
+            let user: User = new User(this, u)
+            this.users.set(user.id, user)
+            yield user;
         }
+
+        if (response.data.cursor)
+            yield* this.fetch_user_list(limit, response.data.cursor);
     }
 
     async get_conversation(id: Number): Promise<Conversation | undefined> {
-        if(!this.conversations.has(id)) await this.fetch_user_list()
+        if(!this.conversations.has(id)) await this.fetch_conversation_list()
         return this.conversations.get(id)
     }
 
@@ -65,6 +74,7 @@ export class KakaoWork {
             user_ids: user_ids
         };
         const response = await this.client.post('/conversations.open', data);
+        KakaoWork.throwIfAbnormal(response);
         
         let conv: Conversation = new Conversation(this, response.data.conversation);
         this.conversations.set(conv.id, conv);
@@ -72,28 +82,20 @@ export class KakaoWork {
         return conv;
     }
 
-    async fetch_conversation_list(limit?: Number, cursor?: string): Promise<Array<Conversation>> {
+    async *fetch_conversation_list(limit?: Number, cursor?: string): AsyncGenerator<Conversation, void> {
         if (!limit) limit = 100
         let data = (cursor)? { cursor: cursor, limit: `${limit}` } : { limit: `${limit}` };
 
         const response = await this.client.get('/conversations.list', { params: data });
-        
-        response.data.conversations.forEach((c: Conversation) => {
-            let conv = new Conversation(this, c)
-            this.conversations.set(conv.id, conv)
-        });
+        KakaoWork.throwIfAbnormal(response);
 
-        return Array.from(this.conversations.values());
-    }
+        for(const c of response.data.conversations) {
+            let conversation = new Conversation(this, c);
+            this.conversations.set(conversation.id, conversation);
+            yield conversation;
+        }
 
-    async fetch_conversation_users(id: Number | Conversation): Promise<Array<User>> {
-        if (id instanceof Conversation) id = id.id;
-        const response = await this.client.get(`/conversations/${id}/users`);
-        
-        let users: Array<User> = new Array();
-        response.data.users.forEach((u:User) => {
-            users.push(new User(this, u))
-        });
-        return users;
+        if (response.data.cursor)
+            yield* this.fetch_conversation_list(limit, response.data.cursor);
     }
 }

@@ -1,4 +1,4 @@
-import { Block, MessageBlock } from "./block";
+import { Block } from "./block";
 
 
 export class BlockContainer {
