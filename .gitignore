@@ -1,0 +1,7 @@
+.idea
+.vscode
+.webstorm
+
+dist
+node_modules
+
