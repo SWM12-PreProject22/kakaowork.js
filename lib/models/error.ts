@@ -1,17 +1,18 @@
-import { AxiosError } from "axios";
-import { KakaoWork } from "../ApiClient";
+import { AxiosError } from 'axios';
+import type KakaoWork from '../KakaoWork';
 
 interface KakaoWorkServerReportedError {
-    client?: KakaoWork
-    error?: AxiosError
+  client?: KakaoWork
+  error?: AxiosError
 }
 
-export class InvalidParameterError implements KakaoWorkServerReportedError {
-    client: KakaoWork
-    error: AxiosError
+export default class InvalidParameterError implements KakaoWorkServerReportedError {
+  client: KakaoWork;
 
-    constructor(client: KakaoWork, error: AxiosError) {
-        this.client = client;
-        this.error = error;
-    }
+  error: AxiosError;
+
+  constructor(client: KakaoWork, error: AxiosError) {
+    this.client = client;
+    this.error = error;
+  }
 }
