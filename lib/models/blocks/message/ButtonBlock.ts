@@ -16,11 +16,7 @@ export default class ButtonBlock implements MessageBlock {
 
   action?: ButtonActionType;
 
-  constructor(
-    text: string,
-    style: ButtonStyleType,
-    action?: ButtonActionType,
-  ) {
+  constructor(text: string, style: ButtonStyleType, action?: ButtonActionType) {
     this.text = text;
     this.style = style;
     this.action = action;

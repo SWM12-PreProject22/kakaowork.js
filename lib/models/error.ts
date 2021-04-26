@@ -2,11 +2,12 @@ import { AxiosError } from 'axios';
 import type KakaoWork from '../KakaoWork';
 
 interface KakaoWorkServerReportedError {
-  client?: KakaoWork
-  error?: AxiosError
+  client?: KakaoWork;
+  error?: AxiosError;
 }
 
-export default class InvalidParameterError implements KakaoWorkServerReportedError {
+export default class InvalidParameterError
+  implements KakaoWorkServerReportedError {
   client: KakaoWork;
 
   error: AxiosError;

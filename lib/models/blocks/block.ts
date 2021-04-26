@@ -1,11 +1,9 @@
 export interface Block {
-  type(): string
+  type(): string;
 
-  serialize(): Map<string, any>
+  serialize(): Map<string, any>;
 }
 
-export interface MessageBlock extends Block {
-}
+export interface MessageBlock extends Block {}
 
-export interface ModalBlock extends Block {
-}
+export interface ModalBlock extends Block {}

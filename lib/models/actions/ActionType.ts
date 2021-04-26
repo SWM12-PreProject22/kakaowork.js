@@ -1,5 +1,5 @@
 export interface ButtonActionType {
-  actionType: string
+  actionType: string;
 
   getValue(): string;
 

@@ -25,5 +25,5 @@ export {
   InputBlock,
   LabelBlock,
   SelectBlock,
-  SelectOption
-}
+  SelectOption,
+};

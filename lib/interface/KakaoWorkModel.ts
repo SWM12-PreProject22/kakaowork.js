@@ -7,7 +7,12 @@ export default class KakaoWorkModel {
 
   client: KakaoWork;
 
-  constructor(client: KakaoWork, obj?: Object, created: Date = new Date(), updated: Date = created) {
+  constructor(
+    client: KakaoWork,
+    obj?: Object,
+    created: Date = new Date(),
+    updated: Date = created
+  ) {
     this.createdAt = created;
     this.updatedAt = updated;
 

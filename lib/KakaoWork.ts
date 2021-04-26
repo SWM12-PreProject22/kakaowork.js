@@ -12,7 +12,10 @@ export default class KakaoWork {
 
   private users: Map<Number, User> = new Map<Number, User>();
 
-  private conversations: Map<Number, Conversation> = new Map<Number, Conversation>();
+  private conversations: Map<Number, Conversation> = new Map<
+    Number,
+    Conversation
+  >();
 
   constructor(token: string) {
     KakaoWork.instance = this;
@@ -33,8 +36,11 @@ export default class KakaoWork {
     return this.users.get(id);
   }
 
-  async* fetchUserList(limit: number = 100, cursor?: string): AsyncGenerator<User, void> {
-    const data = (cursor) ? { cursor } : { limit: `${limit}` };
+  async *fetchUserList(
+    limit: number = 100,
+    cursor?: string
+  ): AsyncGenerator<User, void> {
+    const data = cursor ? { cursor } : { limit: `${limit}` };
     const response = await this.client.get('/users.list', { params: data });
     throwIfAbnormal(response);
     const userList: Object[] = response.data.users;
@@ -45,7 +51,8 @@ export default class KakaoWork {
       yield user;
     }
 
-    if (response.data.cursor) yield* this.fetchUserList(limit, response.data.cursor);
+    if (response.data.cursor)
+      yield* this.fetchUserList(limit, response.data.cursor);
   }
 
   async getConversation(id: Number): Promise<Conversation | undefined> {
@@ -54,28 +61,40 @@ export default class KakaoWork {
   }
 
   async openConversation(...userIds: number[]): Promise<Conversation> {
-    const data = (userIds.length === 1) ? {
-      user_id: `${userIds[0]}`,
-    } : {
-      user_ids: userIds,
-    };
+    const data =
+      userIds.length === 1
+        ? {
+            user_id: `${userIds[0]}`,
+          }
+        : {
+            user_ids: userIds,
+          };
     const response = await this.client.post('/conversations.open', data);
     throwIfAbnormal(response);
 
-    const conv: Conversation = new Conversation(this, response.data.conversation);
+    const conv: Conversation = new Conversation(
+      this,
+      response.data.conversation
+    );
     this.conversations.set(conv.id, conv);
 
     return conv;
   }
 
-  async* fetchConversationList(limit: number = 100, cursor?: string)
-    : AsyncGenerator<Conversation, void> {
-    const data = (cursor) ? {
-      cursor,
-      limit: `${limit}`,
-    } : { limit: `${limit}` };
+  async *fetchConversationList(
+    limit: number = 100,
+    cursor?: string
+  ): AsyncGenerator<Conversation, void> {
+    const data = cursor
+      ? {
+          cursor,
+          limit: `${limit}`,
+        }
+      : { limit: `${limit}` };
 
-    const response = await this.client.get('/conversations.list', { params: data });
+    const response = await this.client.get('/conversations.list', {
+      params: data,
+    });
     throwIfAbnormal(response);
     const conversations: Object[] = Object.values(response.data.conversations);
 
@@ -85,7 +104,8 @@ export default class KakaoWork {
       yield conversation;
     }
 
-    if (response.data.cursor) yield* this.fetchConversationList(limit, response.data.cursor);
+    if (response.data.cursor)
+      yield* this.fetchConversationList(limit, response.data.cursor);
   }
 
   private buildClient(): AxiosInstance {

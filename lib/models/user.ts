@@ -8,7 +8,7 @@ interface UserIdentifications {
 }
 
 export default class User extends KakaoWorkModel {
-  id!: Number;
+  id!: number;
 
   name!: string;
 
@@ -41,4 +41,3 @@ export default class User extends KakaoWorkModel {
     this.id = Number(this.id);
   }
 }
-

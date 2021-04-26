@@ -6,7 +6,6 @@ export default class DividerBlock implements MessageBlock {
   }
 
   serialize(): Map<string, any> {
-    return new Map()
-      .set('type', this.type());
+    return new Map().set('type', this.type());
   }
 }

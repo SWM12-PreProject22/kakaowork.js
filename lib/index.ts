@@ -4,7 +4,6 @@ import User from './models/user';
 import Message from './models/message';
 import Conversation from './models/conversation';
 
-import BlockContainer from './models/container/container';
 import {
   ActionBlock,
   ButtonBlock,
@@ -18,20 +17,23 @@ import {
   SelectBlock,
   SelectOption,
   InputBlock,
-  LabelBlock
+  LabelBlock,
 } from './models/blocks';
 import actions from './models/actions';
-import { BaseKakaoWorkError, KakaoServerError, KakaoWorkAbnormalStatus } from './errors'
+import {
+  BaseKakaoWorkError,
+  KakaoServerError,
+  KakaoWorkAbnormalStatus,
+} from './errors';
+import { BlockContainer, ModalContainer } from './models/container';
 
 export {
   KakaoWork,
-
   User,
   Message,
   Conversation,
-
   BlockContainer,
-
+  ModalContainer,
   ActionBlock,
   ButtonBlock,
   ContextBlock,
@@ -45,10 +47,8 @@ export {
   SelectOption,
   InputBlock,
   LabelBlock,
-
   actions,
-
   BaseKakaoWorkError,
   KakaoServerError,
-  KakaoWorkAbnormalStatus
+  KakaoWorkAbnormalStatus,
 };

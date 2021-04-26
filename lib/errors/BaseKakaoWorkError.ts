@@ -1,3 +1,1 @@
-export default class BaseKakaoWorkError extends Error {
-}
-
+export default class BaseKakaoWorkError extends Error {}
