@@ -3,6 +3,8 @@ import BlockContainer from './container/container';
 import Message from './message';
 import User from './user';
 import { throwIfAbnormal } from '../utils/ResponseUtil';
+import { Container, ModalContainer, BlockContainer } from './container';
+import type KakaoWork from '../KakaoWork';
 
 export default class Conversation extends KakaoWorkModel {
   id!: Number;
@@ -39,7 +41,14 @@ export default class Conversation extends KakaoWorkModel {
     map.set('text', text);
     if (blocks != null) map.set('blocks', blocks.serialize());
 
-    const response = await this.client.client.post(`/messages.send`, Object.fromEntries(map));
+    if (blocks instanceof BlockContainer || blocks instanceof ModalContainer) {
+      blocks.serialize(map);
+    }
+
+    const response = await this.client.client.post(
+      `/messages.send`,
+      Object.fromEntries(map)
+    );
     throwIfAbnormal(response);
     return new Message(this.client, response.data.message);
   }
